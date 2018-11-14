@@ -15,7 +15,7 @@ function diasFeriados($ano = null)
     $mes_pascoa = date('n', $pascoa);
     $ano_pascoa = date('Y', $pascoa);
    
-    $feriados = array(
+    $feriados_dias = array(
         // Tatas Fixas dos feriados Nacionail Basileiras
         mktime(0, 0, 0, 1,  1,   $ano), // Confraternização Universal - Lei nº 662, de 06/04/49
         mktime(0, 0, 0, 4,  21,  $ano), // Tiradentes - Lei nº 662, de 06/04/49
@@ -39,33 +39,26 @@ function diasFeriados($ano = null)
         mktime(0, 0, 0, $mes_pascoa, $dia_pascoa + 60,  $ano_pascoa),//Corpus Cirist
     );
    
-    sort($feriados);
+    sort($feriados_dias);
+
+    $feriados = [];
+
+    foreach($feriados_dias as $a)
+    {
+        array_push($feriados,date("d-m-Y",$a));						 
+    }
     
     return $feriados;
 }
 
-$feriados = [];
-
-$ano=date("Y");
-
-foreach(diasFeriados($ano) as $a)
-{
-    array_push($feriados,date("d-m-Y",$a));						 
-}
-
-echo "<pre>";
-
-print_r($feriados);
-
-echo "<br>----------------------------------------------------------------------<br>";
 
 $dataInicio = new DateTime('2018-11-14'); 
 
 echo "dia inicial: " . date_format($dataInicio, "d-m-Y") . "<br><br>";
 
-function diasUteis($dataInicio, $totalDias, $feriados){
+function diasUteis($dataInicio, $diasUteis, $feriados){
     $cout = 0;
-    while ($cout < $totalDias) {
+    while ($cout < $diasUteis) {
 
         if(in_array(date_format($dataInicio, "d-m-Y"), $feriados)){
             $dataInicio->modify('+1 weekday');
@@ -74,8 +67,8 @@ function diasUteis($dataInicio, $totalDias, $feriados){
         $dataInicio->modify('+1 weekday'); 
         $cout++;
     }
-    return  date_format($dataInicio, "d-m-Y");
+    return  date_format($dataInicio, "d-m-Y"); //retorna a data inicio + 
 }
 
-echo "<br>Dia fim: " . diasUteis($dataInicio, 5, $feriados) . "<br>";
+echo "<br>Dia fim: " . diasUteis($dataInicio, 5, diasFeriados() ) . "<br>";
 
