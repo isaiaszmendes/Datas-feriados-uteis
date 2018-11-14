@@ -52,23 +52,22 @@ function diasFeriados($ano = null)
 }
 
 
-$dataInicio = new DateTime('2018-11-14'); 
+echo "<pre>";
+print_r(diasFeriados());
 
-echo "dia inicial: " . date_format($dataInicio, "d-m-Y") . "<br><br>";
 
 function diasUteis($dataInicio, $diasUteis, $feriados){
+    $data = new DateTime($dataInicio); 
     $cout = 0;
     while ($cout < $diasUteis) {
 
-        if(in_array(date_format($dataInicio, "d-m-Y"), $feriados)){
-            $dataInicio->modify('+1 weekday');
+        if(in_array(date_format($data, "d-m-Y"), $feriados)){
+            $data->modify('+1 weekday');
         }
 
-        $dataInicio->modify('+1 weekday'); 
+        $data->modify('+1 weekday'); 
         $cout++;
     }
-    return  date_format($dataInicio, "d-m-Y"); //retorna a data inicio + 
+    return  date_format($data, "d-m-Y"); //retorna a data inicio + diasUteis
 }
-
-echo "<br>Dia fim: " . diasUteis($dataInicio, 5, diasFeriados() ) . "<br>";
-
+echo "<br>Dia fim: " . diasUteis('2018-11-13', 5, diasFeriados()) . "<br>";
